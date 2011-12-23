@@ -10,7 +10,7 @@ import testdata.TestDataVocabulary.Edge1;
 import testdata.TestDataVocabulary.Vertex1;
 import testdata.TestDataVocabulary.Vertex2;
 
-public class GraphTest {
+public class GraphBuildTest {
 
 	private static final String G1 = "G1";
 

@@ -5,21 +5,9 @@ public class Edge {
 	private int weight;
 	private Pair pair;
 
-	public Edge(int weight, Vertex v1, Vertex v2) {
+	public Edge(int weight, Vertex v1, Vertex v2) throws Exception {
 		this.weight = weight;
-		try {
-			getPair().add(v1);
-			getPair().add(v2);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private Pair getPair() {
-		if (this.pair == null) {
-			this.pair = new Pair();
-		}
-		return this.pair;
+		this.setPair(new Pair(v1, v2));
 	}
 
 	public boolean has(Vertex vertex) {
@@ -28,6 +16,14 @@ public class Edge {
 
 	public int getWeight() {
 		return this.weight;
+	}
+
+	public Pair getPair() {
+		return pair;
+	}
+
+	public void setPair(Pair pair) {
+		this.pair = pair;
 	}
 
 }

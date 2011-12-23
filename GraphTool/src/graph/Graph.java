@@ -2,7 +2,7 @@ package graph;
 
 import java.util.ArrayList;
 
-import util.GraphUtils;
+import algorithms.GraphAlgorithmsUtils;
 
 public class Graph {
 
@@ -19,19 +19,26 @@ public class Graph {
 	}
 
 	public void addVertex(Vertex vertex) throws Exception {
-		GraphUtils.vertexLabelAvailibility(getVertices(), vertex);
 		getVertices().add(vertex);
 	}
 
-	private ArrayList<Vertex> getVertices() {
+	public ArrayList<Vertex> getVertices() {
 		if (this.vertices == null) {
 			this.vertices = new ArrayList<Vertex>();
 		}
 		return this.vertices;
 	}
 
-	public void addEdge(Edge edge) {
+	public void addEdge(Edge edge) throws Exception {
 		getEdges().add(edge);
+		Vertex v1 = edge.getPair().getV1();
+		Vertex v2 = edge.getPair().getV2();
+		if (!getVertices().contains(v1)) {
+			getVertices().add(v1);
+		}
+		if (!getVertices().contains(v2)) {
+			getVertices().add(v2);
+		}
 	}
 
 	private ArrayList<Edge> getEdges() {
@@ -47,5 +54,9 @@ public class Graph {
 
 	public boolean hasEdge(Edge edge) {
 		return getEdges().contains(edge);
+	}
+
+	public boolean isBipartite() throws Exception {
+		return GraphAlgorithmsUtils.checkBipartite(this);
 	}
 }

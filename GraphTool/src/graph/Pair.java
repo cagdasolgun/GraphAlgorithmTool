@@ -1,32 +1,35 @@
 package graph;
 
-import java.util.ArrayList;
-
-import util.GraphUtils;
-
 public class Pair {
 
-	private ArrayList<Vertex> points = new ArrayList<Vertex>();
+	private Vertex v1;
 
-	public void add(Vertex vertex) throws Exception {
-		int size = getPoints().size();
-		if (size < 2) {
-			GraphUtils.vertexLabelAvailibility(this.getPoints(), vertex);
-			getPoints().add(vertex);
-		} else if (size == 2) {
-			throw new Exception("Pairs can only have 2 elements...");
-		}
-	}
+	private Vertex v2;
 
-	public ArrayList<Vertex> getPoints() {
-		return points;
-	}
-
-	public void setPoints(ArrayList<Vertex> points) {
-		this.points = points;
+	public Pair(Vertex v1, Vertex v2) throws Exception {
+		setV1(v1);
+		setV2(v2);
+		v1.getNeighbours().add(v2);
+		v2.getNeighbours().add(v1);
 	}
 
 	public boolean has(Vertex vertex) {
-		return getPoints().contains(vertex);
+		return (getV1().equals(vertex) | getV2().equals(vertex)) ? true : false;
+	}
+
+	public Vertex getV2() {
+		return v2;
+	}
+
+	public void setV2(Vertex v2) {
+		this.v2 = v2;
+	}
+
+	public Vertex getV1() {
+		return v1;
+	}
+
+	public void setV1(Vertex v1) {
+		this.v1 = v1;
 	}
 }

@@ -39,7 +39,7 @@ public class TestDataVocabulary {
 		public static final Vertex v1 = Vertex1.getVertex();
 		public static final Vertex v2 = Vertex2.getVertex();
 
-		public static Edge getEdge() {
+		public static Edge getEdge() throws Exception {
 			return new Edge(WEIGHT, v1, v2);
 		}
 
