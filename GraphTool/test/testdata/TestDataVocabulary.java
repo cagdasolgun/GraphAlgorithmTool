@@ -45,4 +45,42 @@ public class TestDataVocabulary {
 
 	}
 
+	public static class Vertex3 {
+
+		public static final String V1 = "v3";
+		public static final int X1 = 22;
+		public static final int Y1 = 15;
+		public static final Point POINT1 = new Point(X1, Y1);
+
+		public static Vertex getVertex() {
+			return new Vertex(V1, POINT1);
+		}
+
+	}
+
+	public static class Vertex4 {
+
+		public static final String V1 = "v4";
+		public static final int X1 = 52;
+		public static final int Y1 = 16;
+		public static final Point POINT1 = new Point(X1, Y1);
+
+		public static Vertex getVertex() {
+			return new Vertex(V1, POINT1);
+		}
+
+	}
+
+	public static class Edge2 {
+
+		public static final int WEIGHT = 2;
+		public static final Vertex v1 = Vertex3.getVertex();
+		public static final Vertex v2 = Vertex4.getVertex();
+
+		public static Edge getEdge() throws Exception {
+			return new Edge(WEIGHT, v1, v2);
+		}
+
+	}
+
 }

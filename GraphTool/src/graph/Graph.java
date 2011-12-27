@@ -2,7 +2,7 @@ package graph;
 
 import java.util.ArrayList;
 
-import algorithms.GraphAlgorithmsUtils;
+import algorithms.GraphAlgorithms;
 
 public class Graph {
 
@@ -57,6 +57,18 @@ public class Graph {
 	}
 
 	public boolean isBipartite() throws Exception {
-		return GraphAlgorithmsUtils.checkBipartite(this);
+		return GraphAlgorithms.checkBipartite(this);
 	}
+
+	@Override
+	public String toString() {
+		String toString = "";
+		for (Edge item : getEdges()) {
+			Pair pair = item.getPair();
+			toString += "[" + this.getLabel() + "," + pair.getV1().getLabel()
+					+ "," + pair.getV2().getLabel() + "]\n";
+		}
+		return toString;
+	}
+
 }
