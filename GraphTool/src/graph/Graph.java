@@ -2,13 +2,15 @@ package graph;
 
 import java.util.ArrayList;
 
+import logger.GraphLogger;
+
 import algorithms.GraphAlgorithms;
 
 public class Graph {
 
 	private String label;
 	private ArrayList<Vertex> vertices = null;
-	private ArrayList<Edge> edges = null;
+	private ArrayList<UndirectedEdge> edges = null;
 
 	public Graph(String label) {
 		this.label = label;
@@ -29,7 +31,7 @@ public class Graph {
 		return this.vertices;
 	}
 
-	public void addEdge(Edge edge) throws Exception {
+	public void addEdge(UndirectedEdge edge) throws Exception {
 		getEdges().add(edge);
 		Vertex v1 = edge.getPair().getV1();
 		Vertex v2 = edge.getPair().getV2();
@@ -41,9 +43,9 @@ public class Graph {
 		}
 	}
 
-	private ArrayList<Edge> getEdges() {
+	private ArrayList<UndirectedEdge> getEdges() {
 		if (this.edges == null) {
-			this.edges = new ArrayList<Edge>();
+			this.edges = new ArrayList<UndirectedEdge>();
 		}
 		return this.edges;
 	}
@@ -52,7 +54,7 @@ public class Graph {
 		return getVertices().contains(vertex);
 	}
 
-	public boolean hasEdge(Edge edge) {
+	public boolean hasEdge(UndirectedEdge edge) {
 		return getEdges().contains(edge);
 	}
 
@@ -63,12 +65,70 @@ public class Graph {
 	@Override
 	public String toString() {
 		String toString = "";
-		for (Edge item : getEdges()) {
+		for (UndirectedEdge item : getEdges()) {
 			Pair pair = item.getPair();
 			toString += "[" + this.getLabel() + "," + pair.getV1().getLabel()
-					+ "," + pair.getV2().getLabel() + "]\n";
+					+ "," + pair.getV2().getLabel() + "," + item.getWeight()
+					+ "]\n";
+		}
+
+		for (Vertex item : getVertices()) {
+			for (Vertex neighbour : item.getNeighbours()) {
+				toString += "\n " + item.getLabel() + " -> "
+						+ neighbour.getLabel();
+			}
 		}
 		return toString;
 	}
 
+	/**
+	 * set infinite value to other vertices in graph
+	 * 
+	 * @param vertex
+	 *            is initial {@link Vertex} in shortest path
+	 */
+	public void setValueToOtherVertices(Vertex vertex) {
+		vertex.setValue(0);
+		for (Vertex item : getVertices()) {
+			// set value if it is not initial vertex
+			if (!item.equals(vertex)) {
+				item.setValue(99999);
+			}
+			GraphLogger.getLogger().info(
+					item.getLabel() + " is labeled as " + item.getValue());
+		}
+
+	}
+
+	/**
+	 * gets edge weight which is between given vertices
+	 * 
+	 * @param v1
+	 * @param v2
+	 * @return weight of edge between given vertices
+	 */
+	public int getEdgeWeight(Vertex v1, Vertex v2) {
+		for (UndirectedEdge item : getEdges()) {
+			if (item.getPair().has(v1) && item.getPair().has(v2)) {
+				return item.getWeight();
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * finds vertex with its label
+	 * 
+	 * @param label
+	 *            is a {@link String} that labels a {@link Vertex}
+	 * @return {@link Vertex} that labeled with given label
+	 */
+	public Vertex findVertex(String label) {
+		for (Vertex item : getVertices()) {
+			if (item.getLabel().equals(label)) {
+				return item;
+			}
+		}
+		return null;
+	}
 }

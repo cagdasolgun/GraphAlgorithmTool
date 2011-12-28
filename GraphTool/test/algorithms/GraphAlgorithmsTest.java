@@ -1,32 +1,48 @@
 package algorithms;
 
-import graph.Edge;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import graph.Graph;
+import graph.Vertex;
+
+import java.util.List;
+
+import logger.GraphLogger;
 
 import org.junit.Test;
 
-import testdata.TestDataVocabulary.Edge1;
-import testdata.TestDataVocabulary.Edge2;
+import testdata.TestDataVocabulary;
 import testdata.TestDataVocabulary.Vertex1;
-import testdata.TestDataVocabulary.Vertex3;
+import testdata.TestDataVocabulary.Vertex4;
+import util.GraphUtils;
 
 public class GraphAlgorithmsTest {
 
 	@Test
 	public void testGraphBipartite() throws Exception {
-		Edge edge1 = Edge1.getEdge();
-		Edge edge2 = Edge2.getEdge();
-		Edge edge3 = new Edge(5, Vertex1.getVertex(), Vertex3.getVertex());
-
-		Graph graph = new Graph("G");
-		graph.addEdge(edge1);
-		graph.addEdge(edge2);
-		graph.addEdge(edge3);
-
+		// get test graph
+		Graph graph = TestDataVocabulary.getSampleGraph();
+		// print adjacenties
 		System.out.println(graph.toString());
-
-		GraphAlgorithms.checkBipartite(graph);
+		// assert that if graph is bipartite
+		// TODO not implemented!
+		assertTrue(GraphAlgorithms.checkBipartite(graph));
 
 	}
 
+	@Test
+	public void testShortestPath() throws Exception {
+		// get sample graph
+		Graph graph = TestDataVocabulary.getSampleGraph();
+		// print adjacenties
+		System.out.println(graph.toString());
+		// find shortest path
+		List<Vertex> shortestPath = GraphAlgorithms.getShortestPath(graph,
+				graph.findVertex(Vertex1.V1), graph.findVertex(Vertex4.V4));
+		// assert shortest path value
+		assertEquals(7, GraphUtils.getPathWeight(graph, shortestPath));
+		// print path
+		GraphUtils.pathToString(shortestPath);
+
+	}
 }

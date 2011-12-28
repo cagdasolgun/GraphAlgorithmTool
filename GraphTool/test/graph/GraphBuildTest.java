@@ -31,7 +31,7 @@ public class GraphBuildTest {
 		// create second vertex
 		Vertex v2 = new Vertex(Vertex2.V2, Vertex2.POINT2);
 		// create an edge
-		Edge e = new Edge(Edge1.WEIGHT, v1, v2);
+		UndirectedEdge e = new UndirectedEdge(Edge1.WEIGHT, v1, v2);
 		// assert first vertex in edge
 		assertTrue(e.has(v1));
 		// assert second vertex in edge
@@ -47,7 +47,7 @@ public class GraphBuildTest {
 		// create vertex2
 		Vertex vertex2 = new Vertex("f", new Point(5, 54));
 		// create an edge
-		Edge edge1 = Edge1.getEdge();
+		UndirectedEdge edge1 = Edge1.getEdge();
 		// create a graph
 		Graph g = new Graph(G1);
 		// assert graph label

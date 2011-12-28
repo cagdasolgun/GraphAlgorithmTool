@@ -9,8 +9,6 @@ public class Pair {
 	public Pair(Vertex v1, Vertex v2) throws Exception {
 		setV1(v1);
 		setV2(v2);
-		v1.getNeighbours().add(v2);
-		v2.getNeighbours().add(v1);
 	}
 
 	public boolean has(Vertex vertex) {
