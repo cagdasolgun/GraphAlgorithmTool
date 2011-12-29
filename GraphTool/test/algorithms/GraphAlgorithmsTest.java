@@ -32,7 +32,7 @@ public class GraphAlgorithmsTest {
 	}
 
 	@Test
-	public void testShortestPath() throws Exception {
+	public void testShortestPathInUndirectedGraph() throws Exception {
 		// get sample graph
 		Graph graph = TestDataVocabulary.getSampleGraph();
 		// print adjacenties
@@ -48,7 +48,8 @@ public class GraphAlgorithmsTest {
 	}
 
 	@Test
-	public void testShortestPathWithAnotherTestData() throws Exception {
+	public void testShortestPathInUndirectedGraphWithAnotherTestData()
+			throws Exception {
 
 		// create vertices
 		Vertex a = new Vertex("a", TestDataVocabulary.randomPointGenerator());
@@ -80,11 +81,43 @@ public class GraphAlgorithmsTest {
 		graph.addEdge(ef);
 		// find shortest path from a to e
 		List<Vertex> shortestPath = GraphAlgorithms
-				.getShortestPath(graph, a, e);
+				.getShortestPath(graph, a, f);
 		// assert shortest path value
-		assertEquals(10, GraphUtils.getPathWeight(graph, shortestPath));
+		assertEquals(13, GraphUtils.getPathWeight(graph, shortestPath));
 		// print path
 		GraphUtils.pathToString(shortestPath);
 
 	}
+
+	@Test
+	public void testEulerianPathInGraph() throws Exception {
+
+		// create vertices
+		Vertex a = new Vertex("a", TestDataVocabulary.randomPointGenerator());
+		Vertex b = new Vertex("b", TestDataVocabulary.randomPointGenerator());
+		Vertex c = new Vertex("c", TestDataVocabulary.randomPointGenerator());
+		Vertex d = new Vertex("d", TestDataVocabulary.randomPointGenerator());
+		Vertex e = new Vertex("e", TestDataVocabulary.randomPointGenerator());
+
+		// create edges
+		UndirectedEdge ab = new UndirectedEdge(4, a, b);
+		UndirectedEdge ac = new UndirectedEdge(2, a, c);
+		UndirectedEdge ad = new UndirectedEdge(5, a, d);
+		UndirectedEdge ae = new UndirectedEdge(7, a, e);
+		UndirectedEdge be = new UndirectedEdge(9, b, e);
+		UndirectedEdge cd = new UndirectedEdge(6, c, d);
+
+		Graph graph = new Graph("G");
+		graph.addEdge(ab);
+		graph.addEdge(ac);
+		graph.addEdge(ad);
+		graph.addEdge(ae);
+		graph.addEdge(cd);
+
+		// check if graph has eulerian path
+		assertTrue(GraphUtils.isEulerianPathExists(graph));
+
+	}
+
+	GraphUtils g;
 }
