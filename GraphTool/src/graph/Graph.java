@@ -3,7 +3,6 @@ package graph;
 import java.util.ArrayList;
 
 import logger.GraphLogger;
-
 import algorithms.GraphAlgorithms;
 
 public class Graph {

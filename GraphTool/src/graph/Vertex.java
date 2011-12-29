@@ -71,6 +71,7 @@ public class Vertex {
 				logger.info(this.getLabel() + " - " + item.getLabel()
 						+ " weigth = " + edgeWeight);
 				if (edgeWeight < h) {
+					h = edgeWeight;
 					vertex = item;
 				}
 			}

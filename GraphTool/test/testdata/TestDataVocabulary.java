@@ -5,11 +5,7 @@ import graph.UndirectedEdge;
 import graph.Vertex;
 
 import java.awt.Point;
-
-import testdata.TestDataVocabulary.Edge1;
-import testdata.TestDataVocabulary.Edge2;
-import testdata.TestDataVocabulary.Vertex1;
-import testdata.TestDataVocabulary.Vertex3;
+import java.util.Random;
 
 public class TestDataVocabulary {
 
@@ -104,6 +100,13 @@ public class TestDataVocabulary {
 		graph.addEdge(edge2);
 		graph.addEdge(edge3);
 		return graph;
+	}
+
+	public static Point randomPointGenerator() {
+		Random r = new Random();
+		int x = r.nextInt();
+		int y = r.nextInt();
+		return new Point(x, y);
 	}
 
 }
