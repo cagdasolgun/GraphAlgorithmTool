@@ -6,7 +6,6 @@ import graph.pair.Pair;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import logger.GraphLogger;
@@ -122,19 +121,11 @@ public class GraphAlgorithms {
 
 	public static boolean isIsomorphic(Graph g1, Graph g2) throws Exception {
 		return (GraphUtils.getOrder(g1) == GraphUtils.getOrder(g2)
-				&& (GraphUtils.getSize(g1) == GraphUtils.getSize(g2)) && checkDiameters(
+				&& (GraphUtils.getSize(g1) == GraphUtils.getSize(g2)) && checkDegreeMap(
 					g1, g2));
 	}
 
-	/**
-	 * @param g1
-	 * @param g2
-	 * @throws Exception
-	 */
-	private static boolean checkDiameters(Graph g1, Graph g2) throws Exception {
-		HashMap<Pair, Integer> g1DiameterHashMap = GraphUtils.getDiameters(g1);
-		HashMap<Pair, Integer> g2DiameterHashMap = GraphUtils.getDiameters(g2);
-		System.out.println(g1DiameterHashMap + " " + g2DiameterHashMap);
-		return false;
+	private static boolean checkDegreeMap(Graph g1, Graph g2) throws Exception {
+		return GraphUtils.getDegreeMap(g1).equals(GraphUtils.getDegreeMap(g2));
 	}
 }

@@ -12,7 +12,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import testdata.TestDataVocabulary;
-import testdata.TestDataVocabulary.Edge2;
 import testdata.TestDataVocabulary.Vertex1;
 import testdata.TestDataVocabulary.Vertex2;
 import testdata.TestDataVocabulary.Vertex3;
@@ -135,7 +134,6 @@ public class GraphAlgorithmsTest {
 
 	}
 
-	@Ignore
 	@Test
 	public void testIsomorphisimOfGivenGraphs() throws Exception {
 

@@ -1,16 +1,10 @@
 package util;
 
-import static org.junit.Assert.assertTrue;
 import graph.Graph;
 import graph.Vertex;
-import graph.pair.Pair;
-import graph.pair.VertexPair;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import algorithms.GraphAlgorithms;
 
 import logger.GraphLogger;
 
@@ -96,35 +90,17 @@ public class GraphUtils {
 		return size;
 	}
 
-	public static HashMap<Pair, Integer> getDiameters(Graph graph)
+	public static HashMap<Integer, Integer> getDegreeMap(Graph graph)
 			throws Exception {
-		HashMap<Pair, Integer> hashMapOfDiameters = new HashMap<Pair, Integer>();
-		List<Pair> pairs = createPairs(graph);
-		for (Pair item : pairs) {
-			List<Vertex> shortestPath = GraphAlgorithms.getShortestPath(graph,
-					(Vertex) item.getLeft(), (Vertex) item.getRight());
-			hashMapOfDiameters.put(item, getPathWeight(graph, shortestPath));
-		}
-		return hashMapOfDiameters;
-	}
-
-	private static List<Pair> createPairs(Graph graph) throws Exception {
-		List<Pair> pairs = new ArrayList<Pair>();
-		VertexPair currentPair = new VertexPair();
-		for (Vertex v1 : graph.getVertices()) {
-			for (Vertex v2 : graph.getVertices()) {
-				if (!v1.equals(v2)) {
-					if (!pairs.contains(currentPair)) {
-						currentPair = new VertexPair(v1, v2);
-						GraphLogger.getLogger().info(
-								"Creating pair [" + v1.getLabel() + ","
-										+ v2.getLabel() + "] for graph "
-										+ graph.getLabel());
-						pairs.add(currentPair);
-					}
-				}
+		HashMap<Integer, Integer> degreeMap = new HashMap<Integer, Integer>();
+		for (Vertex item : graph.getVertices()) {
+			int size = item.getNeighbours().size();
+			if (degreeMap.get(size) == null) {
+				degreeMap.put(size, 1);
+			} else {
+				degreeMap.put(size, degreeMap.get(size) + 1);
 			}
 		}
-		return pairs;
+		return degreeMap;
 	}
 }
