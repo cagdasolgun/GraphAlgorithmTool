@@ -7,6 +7,7 @@ import graph.UndirectedEdge;
 import graph.Vertex;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Ignore;
@@ -131,7 +132,20 @@ public class GraphAlgorithmsTest {
 		// check if graph has eulerian path
 		assertTrue(GraphUtils.isEulerianPathExists(graph));
 
-		// TODO bitmedi daha!
+		String message = "";
+		ArrayList<Vertex> pathOrCircuit = GraphAlgorithms.findEuler(a, graph,
+				message);
+
+		if (pathOrCircuit != null) {
+			System.out.println(message);
+			Iterator<Vertex> iterator = pathOrCircuit.iterator();
+			while (iterator.hasNext()) {
+				Vertex vertex = (Vertex) iterator.next();
+				System.out.print("->" + vertex.getLabel());
+			}
+		} else {
+			System.out.println(message);
+		}
 
 	}
 
@@ -166,7 +180,7 @@ public class GraphAlgorithmsTest {
 		graph.addEdge(df);
 		graph.addEdge(ef);
 
-		if (GraphAlgorithms.isConnected(this, graph)) {
+		if (GraphAlgorithms.isConnected(graph)) {
 			System.out.println("Graph is connected");
 		} else {
 			System.out.println("Graph is not connected");
@@ -244,4 +258,58 @@ public class GraphAlgorithmsTest {
 		}
 
 	}
+
+	@Test
+	public void testHamiltonPath() throws Exception {
+		// get test graph
+		Vertex A = new Vertex("A", TestDataVocabulary.randomPointGenerator());
+		Vertex B = new Vertex("B", TestDataVocabulary.randomPointGenerator());
+		Vertex C = new Vertex("C", TestDataVocabulary.randomPointGenerator());
+		Vertex D = new Vertex("D", TestDataVocabulary.randomPointGenerator());
+		Vertex E = new Vertex("E", TestDataVocabulary.randomPointGenerator());
+		Vertex F = new Vertex("F", TestDataVocabulary.randomPointGenerator());
+		Vertex G = new Vertex("G", TestDataVocabulary.randomPointGenerator());
+
+		UndirectedEdge e1 = new UndirectedEdge(A, G);
+		UndirectedEdge e2 = new UndirectedEdge(A, F);
+		UndirectedEdge e3 = new UndirectedEdge(A, E);
+		UndirectedEdge e4 = new UndirectedEdge(A, C);
+		UndirectedEdge e5 = new UndirectedEdge(B, F);
+		UndirectedEdge e6 = new UndirectedEdge(B, E);
+		UndirectedEdge e7 = new UndirectedEdge(B, C);
+		UndirectedEdge e8 = new UndirectedEdge(C, D);
+		UndirectedEdge e9 = new UndirectedEdge(D, G);
+		UndirectedEdge e10 = new UndirectedEdge(D, F);
+		UndirectedEdge e11 = new UndirectedEdge(D, E);
+
+		Graph graph = new Graph("G");
+
+		graph.addEdge(e1);
+		graph.addEdge(e2);
+		graph.addEdge(e3);
+		graph.addEdge(e4);
+		graph.addEdge(e5);
+		graph.addEdge(e6);
+		graph.addEdge(e7);
+		graph.addEdge(e8);
+		graph.addEdge(e9);
+		graph.addEdge(e10);
+		graph.addEdge(e11);
+
+		ArrayList<Vertex> pathOrCircuit = GraphAlgorithms
+				.findHamiltonPathOrCircuit(graph);
+
+		ArrayList<Vertex> expectedPath = new ArrayList<Vertex>();
+		expectedPath.add(G);
+		expectedPath.add(A);
+		expectedPath.add(F);
+		expectedPath.add(B);
+		expectedPath.add(E);
+		expectedPath.add(D);
+		expectedPath.add(C);
+
+		assertEquals(expectedPath, pathOrCircuit);
+
+	}
+
 }

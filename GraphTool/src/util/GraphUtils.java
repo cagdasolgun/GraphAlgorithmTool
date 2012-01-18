@@ -1,6 +1,7 @@
 package util;
 
 import graph.Graph;
+import graph.UndirectedEdge;
 import graph.Vertex;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import logger.GraphLogger;
+import algorithms.GraphAlgorithms;
 
 public class GraphUtils {
 
@@ -106,11 +108,11 @@ public class GraphUtils {
 		return degreeMap;
 	}
 
-	public static boolean hasNotVisitedNeighbour(ArrayList<Vertex> vertexes) {
+	public static boolean hasVisitedNeighbour(ArrayList<Vertex> vertexes) {
 		Iterator<Vertex> iterator = vertexes.iterator();
 		while (iterator.hasNext()) {
 			Vertex vertex = (Vertex) iterator.next();
-			if (!vertex.isVisited()) {
+			if (vertex.isVisited()) {
 				return true;
 			}
 		}
@@ -181,6 +183,162 @@ public class GraphUtils {
 			}
 			System.out.println("<--->");
 
+		}
+	}
+
+	public static UndirectedEdge selectAppropriateEdge(Vertex vertex,
+			Graph graph) {
+		ArrayList<UndirectedEdge> connectedEdges = graph
+				.getConnectedEdges(vertex);
+		UndirectedEdge mandatory = null;
+		if (!connectedEdges.isEmpty() && connectedEdges != null) {
+			for (int i = 0; i < connectedEdges.size(); i++) {
+				UndirectedEdge edge = connectedEdges.get(i);
+				if (!edge.isVisited()) {
+					edge.visit();
+					if (GraphAlgorithms.isConnected(graph)) {
+						return edge;
+					} else {
+						mandatory = edge;
+						edge.unvisit();
+					}
+				}
+			}
+			if (mandatory != null) {
+				mandatory.visit();
+			}
+		}
+		if (GraphUtils.isIsolated(graph, vertex)) {
+			graph.deleteVertex(vertex);
+		}
+		return mandatory;
+	}
+
+	public static boolean isIsolated(Graph graph, Vertex vertex) {
+		ArrayList<UndirectedEdge> connectedEdges = graph
+				.getConnectedEdges(vertex);
+		if (connectedEdges != null) {
+			for (UndirectedEdge item : connectedEdges) {
+				if (!item.isVisited()) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public static ArrayList<Vertex> traverseForEuler(Vertex vertex,
+			UndirectedEdge edge, ArrayList<Vertex> visited,
+			ArrayList<UndirectedEdge> removedEdges, Graph graph) {
+		Vertex reverse = edge.getNeighbour(vertex);
+		visited.add(reverse);
+		while (!hasVisitedEdge(graph)) {
+			UndirectedEdge appropriateEdge = selectAppropriateEdge(reverse,
+					graph);
+			if (edge != null) {
+				removedEdges.add(appropriateEdge);
+				traverseForEuler(reverse, appropriateEdge, visited,
+						removedEdges, graph);
+			} else {
+				return null;
+			}
+		}
+		return visited;
+	}
+
+	public static boolean hasVisitedEdge(Graph graph) {
+		ArrayList<UndirectedEdge> edges = graph.getEdges();
+		Iterator<UndirectedEdge> iterator = edges.iterator();
+		while (iterator.hasNext()) {
+			UndirectedEdge edge = (UndirectedEdge) iterator.next();
+			if (edge.isVisited()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static int getNumberOfUnvisitedNeighbours(Vertex vertex) {
+		int unvisitedCount = 0;
+		for (Vertex item : vertex.getNeighbours()) {
+			if (!item.isVisited()) {
+				unvisitedCount++;
+			}
+		}
+		return unvisitedCount;
+	}
+
+	public static ArrayList<Vertex> getUnvisitedNeighbours(Vertex item) {
+		ArrayList<Vertex> unvisitedNeighbours = new ArrayList<Vertex>();
+		for (Vertex neighbour : item.getNeighbours()) {
+			if (!neighbour.isVisited()) {
+				unvisitedNeighbours.add(neighbour);
+			}
+		}
+		return unvisitedNeighbours;
+	}
+
+	/**
+	 * @param visitingVertices
+	 * @param maxNumber
+	 * @param vertices
+	 *            TODO
+	 */
+	public static void HMPart2(List<Vertex> visitingVertices, int maxNumber,
+			ArrayList<Vertex> vertices) {
+		Vertex next = null;
+		if (vertices.size() > visitingVertices.size()) {
+			for (Vertex item : visitingVertices) {
+				boolean containsAll = vertices
+						.containsAll(item.getNeighbours());
+				if (!containsAll) {
+					ArrayList<Vertex> unvisitedNeighbours = GraphUtils
+							.getUnvisitedNeighbours(item);
+					if (maxNumber <= unvisitedNeighbours.size()) {
+						maxNumber = unvisitedNeighbours.size();
+						next = item;
+					}
+
+				}
+			}
+			if (next != null) {
+				next.setVisited(true);
+				visitingVertices.add(next);
+				maxNumber = -1;
+				System.out.println("Selected Vertex : " + next.getLabel());
+				HMPart2(visitingVertices, maxNumber, vertices);
+			}
+		}
+	}
+
+	/**
+	 * @param vertices
+	 * @param visitingVertices
+	 *            TODO
+	 * @param maxNumber
+	 *            TODO
+	 */
+	public static void HMPart1(ArrayList<Vertex> vertices,
+			List<Vertex> visitingVertices, int maxNumber) {
+		Vertex next = null;
+		for (Vertex item : vertices) {
+			ArrayList<Vertex> unvisitedNeighbours = GraphUtils
+					.getUnvisitedNeighbours(item);
+			System.out.println(item.getLabel() + " has "
+					+ unvisitedNeighbours.size() + " unvisited neighbours");
+			if (unvisitedNeighbours.size() < maxNumber) {
+				maxNumber = unvisitedNeighbours.size();
+				next = item;
+			}
+		}
+		if (next != null) {
+			next.setVisited(true);
+			visitingVertices.add(next);
+			maxNumber = 9999;
+			System.out.println("Selected Vertex : " + next.getLabel());
+			HMPart1(GraphUtils.getUnvisitedNeighbours(next), visitingVertices,
+					maxNumber);
 		}
 	}
 }

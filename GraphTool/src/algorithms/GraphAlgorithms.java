@@ -1,6 +1,7 @@
 package algorithms;
 
 import graph.Graph;
+import graph.UndirectedEdge;
 import graph.Vertex;
 import graph.pair.Pair;
 
@@ -129,8 +130,7 @@ public class GraphAlgorithms {
 		return GraphUtils.getDegreeMap(g1).equals(GraphUtils.getDegreeMap(g2));
 	}
 
-	public static boolean isConnected(GraphAlgorithmsTest graphAlgorithmsTest,
-			Graph graph) {
+	public static boolean isConnected(Graph graph) {
 		ArrayList<Vertex> vertexes = graph.getVertices();
 
 		if (vertexes != null && !vertexes.isEmpty()) {
@@ -139,7 +139,7 @@ public class GraphAlgorithms {
 			}
 			Vertex vertex = vertexes.get(0);
 			GraphUtils.visit(graph, vertex);
-			if (GraphUtils.hasNotVisitedNeighbour(graph.getVertices())) {
+			if (GraphUtils.hasVisitedNeighbour(graph.getVertices())) {
 				GraphUtils.unvisitAllVertexes(vertexes);
 				return false;
 			}
@@ -149,4 +149,49 @@ public class GraphAlgorithms {
 		GraphUtils.unvisitAllVertexes(vertexes);
 		return false;
 	}
+
+	public static ArrayList<Vertex> findEuler(Vertex vertex, Graph graph,
+			String message) {
+		Graph initialGraph = graph;
+		ArrayList<Vertex> visited = new ArrayList<Vertex>();
+		ArrayList<UndirectedEdge> removedEdges = new ArrayList<UndirectedEdge>();
+
+		UndirectedEdge edge = GraphUtils.selectAppropriateEdge(vertex, graph);
+		if (edge == null) {
+			return null;
+		}
+		removedEdges.add(edge);
+		visited.add(vertex);
+		ArrayList<Vertex> visitedVertices = GraphUtils.traverseForEuler(vertex,
+				edge, visited, removedEdges, graph);
+		graph = initialGraph;
+		return visitedVertices;
+	}
+
+	public static ArrayList<Vertex> findHamiltonPathOrCircuit(Graph graph) {
+		ArrayList<Vertex> visitingVertices = new ArrayList<Vertex>();
+		int maxNumber = 9999;
+		GraphUtils.HMPart1(graph.getVertices(), visitingVertices, maxNumber);
+		for (Vertex item : graph.getVertices()) {
+			item.setVisited(false);
+		}
+		maxNumber = -1;
+		GraphUtils.HMPart2(visitingVertices, maxNumber, graph.getVertices());
+
+		if (visitingVertices.size() < graph.getVertices().size()) {
+			System.out.println("Found path :");
+			for (Vertex item : visitingVertices) {
+				System.out.println(item.getLabel() + " ");
+			}
+		}
+
+		if (visitingVertices.size() == graph.getVertices().size()) {
+			System.out.println("Found Hamilton tour :");
+			for (Vertex item : visitingVertices) {
+				System.out.print(item.getLabel() + " ");
+			}
+		}
+		return visitingVertices;
+	}
+
 }

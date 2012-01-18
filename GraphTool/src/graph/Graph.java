@@ -151,4 +151,24 @@ public class Graph {
 		}
 		return null;
 	}
+
+	public ArrayList<UndirectedEdge> getConnectedEdges(Vertex vertex) {
+		System.out.println("searching " + vertex.getLabel()
+				+ " connected edges");
+		ArrayList<UndirectedEdge> containingEdges = new ArrayList<UndirectedEdge>();
+		for (UndirectedEdge item : getEdges()) {
+			if (item.has(vertex)) {
+				containingEdges.add(item);
+				System.out.println("[" + item.getPair().getLeft().getLabel()
+						+ "," + item.getPair().getRight().getLabel()
+						+ "] is connected to " + vertex.getLabel());
+			}
+		}
+		return containingEdges;
+	}
+
+	public void deleteVertex(Vertex vertex) {
+		getVertices().remove(vertices);
+		getEdges().removeAll(getConnectedEdges(vertex));
+	}
 }
