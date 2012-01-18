@@ -1,6 +1,7 @@
 package graph;
 
 import graph.pair.Pair;
+import graph.pair.VertexPair;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -68,11 +69,10 @@ public class Graph {
 	public String toString() {
 		String toString = "";
 		for (UndirectedEdge item : getEdges()) {
-			Pair pair = item.getPair();
-			toString += "[" + this.getLabel() + ","
-					+ ((Vertex) pair.getLeft()).getLabel() + ","
-					+ ((Vertex) pair.getRight()).getLabel() + ","
-					+ item.getWeight() + "]\n";
+			VertexPair pair = item.getPair();
+			toString += "[" + this.getLabel() + "," + pair.getLeft().getLabel()
+					+ "," + pair.getRight().getLabel() + "," + item.getWeight()
+					+ "]\n";
 		}
 
 		for (Vertex item : getVertices()) {

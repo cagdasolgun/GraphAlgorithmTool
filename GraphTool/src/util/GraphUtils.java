@@ -138,4 +138,49 @@ public class GraphUtils {
 			}
 		}
 	}
+
+	public static ArrayList<ArrayList<Vertex>> getPaths(
+			ArrayList<Vertex> vertices, int desiredPathLength) {
+		desiredPathLength++;
+		ArrayList<Vertex> path = null;
+		ArrayList<ArrayList<Vertex>> foundPaths = new ArrayList<ArrayList<Vertex>>();
+		for (Vertex vertex : vertices) {
+			System.out.println("----------");
+			path = new ArrayList<Vertex>();
+			path.add(vertex);
+			traverseGraph(desiredPathLength, vertex, path);
+			foundPaths.add(path);
+		}
+		return foundPaths;
+	}
+
+	/**
+	 * @param desiredPathLength
+	 * @param vertex
+	 * @param path
+	 */
+	private static void traverseGraph(int desiredPathLength, Vertex vertex,
+			ArrayList<Vertex> path) {
+		System.out.println("Now in = " + vertex.getLabel());
+		for (Vertex neighbour : vertex.getNeighbours()) {
+			if (!path.contains(neighbour) && path.size() != desiredPathLength) {
+				path.add(neighbour);
+				traverseGraph(desiredPathLength, neighbour, path);
+			}
+		}
+		if (path.size() != desiredPathLength) {
+			System.out.println("Before Remove last<--->");
+			for (Vertex item : path) {
+				System.out.println(item.getLabel());
+			}
+			System.out.println("<--->");
+			path.remove(path.size() - 1);
+			System.out.println("After Remove last<--->");
+			for (Vertex item : path) {
+				System.out.println(item.getLabel());
+			}
+			System.out.println("<--->");
+
+		}
+	}
 }
