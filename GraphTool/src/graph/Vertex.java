@@ -65,8 +65,8 @@ public class Vertex {
 		Vertex vertex = null;
 		for (Vertex item : getNeighbours()) {
 			logger.info("Current neighbour : " + item.getLabel() + ", value : "
-					+ item.getValue() + ", visited : " + item.getVisited());
-			if (!item.getVisited()) {
+					+ item.getValue() + ", visited : " + item.isVisited());
+			if (!item.isVisited()) {
 				int edgeWeight = graph.getEdgeWeight(this, item);
 				logger.info(this.getLabel() + " - " + item.getLabel()
 						+ " weigth = " + edgeWeight);
@@ -83,7 +83,7 @@ public class Vertex {
 		return this.value;
 	}
 
-	private boolean getVisited() {
+	public boolean isVisited() {
 		return this.visited;
 	}
 
@@ -111,6 +111,5 @@ public class Vertex {
 			return false;
 		return true;
 	}
-	
 
 }

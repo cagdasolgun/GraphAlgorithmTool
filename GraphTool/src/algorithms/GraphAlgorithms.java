@@ -128,4 +128,25 @@ public class GraphAlgorithms {
 	private static boolean checkDegreeMap(Graph g1, Graph g2) throws Exception {
 		return GraphUtils.getDegreeMap(g1).equals(GraphUtils.getDegreeMap(g2));
 	}
+
+	public static boolean isConnected(GraphAlgorithmsTest graphAlgorithmsTest,
+			Graph graph) {
+		ArrayList<Vertex> vertexes = graph.getVertices();
+
+		if (vertexes != null && !vertexes.isEmpty()) {
+			if (vertexes.size() == 1) {
+				return true;
+			}
+			Vertex vertex = vertexes.get(0);
+			GraphUtils.visit(graph, vertex);
+			if (GraphUtils.hasNotVisitedNeighbour(graph.getVertices())) {
+				GraphUtils.unvisitAllVertexes(vertexes);
+				return false;
+			}
+			GraphUtils.unvisitAllVertexes(vertexes);
+			return true;
+		}
+		GraphUtils.unvisitAllVertexes(vertexes);
+		return false;
+	}
 }

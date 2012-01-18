@@ -135,6 +135,45 @@ public class GraphAlgorithmsTest {
 	}
 
 	@Test
+	public void testGraphConnectivity() throws Exception {
+		// create vertices
+		Vertex a = new Vertex("a", TestDataVocabulary.randomPointGenerator());
+		Vertex b = new Vertex("b", TestDataVocabulary.randomPointGenerator());
+		Vertex c = new Vertex("c", TestDataVocabulary.randomPointGenerator());
+		Vertex d = new Vertex("d", TestDataVocabulary.randomPointGenerator());
+		Vertex e = new Vertex("e", TestDataVocabulary.randomPointGenerator());
+		Vertex f = new Vertex("f", TestDataVocabulary.randomPointGenerator());
+		// create edges
+		UndirectedEdge ab = new UndirectedEdge(4, a, b);
+		UndirectedEdge ac = new UndirectedEdge(2, a, c);
+		UndirectedEdge bc = new UndirectedEdge(1, b, c);
+		UndirectedEdge bd = new UndirectedEdge(5, b, d);
+		UndirectedEdge cd = new UndirectedEdge(8, c, d);
+		UndirectedEdge ce = new UndirectedEdge(10, c, e);
+		UndirectedEdge de = new UndirectedEdge(2, d, e);
+		UndirectedEdge df = new UndirectedEdge(6, d, f);
+		UndirectedEdge ef = new UndirectedEdge(3, e, f);
+		// create graph
+		Graph graph = new Graph("G");
+		graph.addEdge(ab);
+		graph.addEdge(ac);
+		graph.addEdge(bc);
+		graph.addEdge(bd);
+		graph.addEdge(cd);
+		graph.addEdge(ce);
+		graph.addEdge(de);
+		graph.addEdge(df);
+		graph.addEdge(ef);
+
+		if (GraphAlgorithms.isConnected(this, graph)) {
+			System.out.println("Graph is connected");
+		} else {
+			System.out.println("Graph is not connected");
+		}
+	}
+
+
+	@Test
 	public void testIsomorphisimOfGivenGraphs() throws Exception {
 
 		// build graph 1

@@ -3,7 +3,9 @@ package util;
 import graph.Graph;
 import graph.Vertex;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import logger.GraphLogger;
@@ -102,5 +104,38 @@ public class GraphUtils {
 			}
 		}
 		return degreeMap;
+	}
+
+	public static boolean hasNotVisitedNeighbour(ArrayList<Vertex> vertexes) {
+		Iterator<Vertex> iterator = vertexes.iterator();
+		while (iterator.hasNext()) {
+			Vertex vertex = (Vertex) iterator.next();
+			if (!vertex.isVisited()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static void unvisitAllVertexes(ArrayList<Vertex> vertexes) {
+		Iterator<Vertex> iterator = vertexes.iterator();
+		while (iterator.hasNext()) {
+			Vertex unVisited = (Vertex) iterator.next();
+			unVisited.setVisited(false);
+		}
+	}
+
+	public static void visit(Graph graph, Vertex vertex) {
+		vertex.setVisited(true);
+		ArrayList<Vertex> neighbours = vertex.getNeighbours();
+		Iterator<Vertex> iterator = neighbours.iterator();
+		if (neighbours != null) {
+			while (iterator.hasNext()) {
+				Vertex neighbour = (Vertex) iterator.next();
+				if (!neighbour.isVisited()) {
+					visit(graph, neighbour);
+				}
+			}
+		}
 	}
 }
