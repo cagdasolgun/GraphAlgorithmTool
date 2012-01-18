@@ -90,10 +90,14 @@ public class TestDataVocabulary {
 	 * @throws Exception
 	 */
 	public static Graph getSampleGraph() throws Exception {
-		UndirectedEdge edge1 = Edge1.getEdge();
-		UndirectedEdge edge2 = Edge2.getEdge();
-		UndirectedEdge edge3 = new UndirectedEdge(5, edge1.getPair().getV1(),
-				edge2.getPair().getV1());
+		Vertex v1 = new Vertex(Vertex1.V1, Vertex1.POINT1);
+		Vertex v2 = new Vertex(Vertex2.V2, Vertex2.POINT2);
+		Vertex v3 = new Vertex(Vertex3.V3, Vertex3.POINT3);
+		Vertex v4 = new Vertex(Vertex4.V4, Vertex4.POINT4);
+
+		UndirectedEdge edge1 = new UndirectedEdge(10, v1, v2);
+		UndirectedEdge edge2 = new UndirectedEdge(2, v3, v4);
+		UndirectedEdge edge3 = new UndirectedEdge(5, v1, v3);
 
 		Graph graph = new Graph("G");
 		graph.addEdge(edge1);

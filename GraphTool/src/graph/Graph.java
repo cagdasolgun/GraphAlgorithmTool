@@ -1,5 +1,8 @@
 package graph;
 
+import graph.pair.Pair;
+
+import java.awt.Color;
 import java.util.ArrayList;
 
 import logger.GraphLogger;
@@ -31,18 +34,18 @@ public class Graph {
 	}
 
 	public void addEdge(UndirectedEdge edge) throws Exception {
-		getEdges().add(edge);
-		Vertex v1 = edge.getPair().getV1();
-		Vertex v2 = edge.getPair().getV2();
+		Vertex v1 = edge.getPair().getLeft();
+		Vertex v2 = edge.getPair().getRight();
 		if (!getVertices().contains(v1)) {
 			getVertices().add(v1);
 		}
 		if (!getVertices().contains(v2)) {
 			getVertices().add(v2);
 		}
+		getEdges().add(edge);
 	}
 
-	private ArrayList<UndirectedEdge> getEdges() {
+	public ArrayList<UndirectedEdge> getEdges() {
 		if (this.edges == null) {
 			this.edges = new ArrayList<UndirectedEdge>();
 		}
@@ -66,9 +69,10 @@ public class Graph {
 		String toString = "";
 		for (UndirectedEdge item : getEdges()) {
 			Pair pair = item.getPair();
-			toString += "[" + this.getLabel() + "," + pair.getV1().getLabel()
-					+ "," + pair.getV2().getLabel() + "," + item.getWeight()
-					+ "]\n";
+			toString += "[" + this.getLabel() + ","
+					+ ((Vertex) pair.getLeft()).getLabel() + ","
+					+ ((Vertex) pair.getRight()).getLabel() + ","
+					+ item.getWeight() + "]\n";
 		}
 
 		for (Vertex item : getVertices()) {
@@ -126,6 +130,23 @@ public class Graph {
 		for (Vertex item : getVertices()) {
 			if (item.getLabel().equals(label)) {
 				return item;
+			}
+		}
+		return null;
+	}
+
+	public Pair getUnpaintedNeighbour() throws Exception {
+		for (Vertex item : getVertices()) {
+			for (Vertex neighbour : item.getNeighbours()) {
+				if (neighbour.getColor() == null && item.getColor() != null) {
+					Color colorToPaint = null;
+					if (item.getColor().equals(Color.BLACK)) {
+						colorToPaint = Color.RED;
+					} else {
+						colorToPaint = Color.BLACK;
+					}
+					return new Pair(neighbour, colorToPaint);
+				}
 			}
 		}
 		return null;

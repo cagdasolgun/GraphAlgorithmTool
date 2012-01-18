@@ -2,17 +2,17 @@ package algorithms;
 
 import graph.Graph;
 import graph.Vertex;
+import graph.pair.Pair;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Logger;
 
 import logger.GraphLogger;
+import util.GraphUtils;
 
 public class GraphAlgorithms {
-
-	private static Logger logger = GraphLogger.getLogger();
 
 	public static boolean checkBipartite(Graph graph) throws Exception {
 		// get all vertices
@@ -20,35 +20,44 @@ public class GraphAlgorithms {
 		// pick an initial color
 		Color initialColor = Color.BLACK;
 		// get initial vertex
-		int vertexIndex = 0;
-		Vertex initialVertex = vertices.get(vertexIndex);
+		Vertex initialVertex = vertices.get(0);
 		// paint initial vertex with initial color
 		initialVertex.setColor(initialColor);
+		// paint initial vertex neighbors
+		for (Vertex neighbour : initialVertex.getNeighbours()) {
+			neighbour.setColor(Color.RED);
+		}
+		// get first unpainted neighbor which has a painted neighbor
+		Pair pair = graph.getUnpaintedNeighbour();
+		while (pair != null) {
+			Vertex vertexToPaint = (Vertex) pair.getLeft();
+			Color colorToPaintVertex = (Color) pair.getRight();
+			GraphLogger.getLogger().info(
+					"Current pair :" + vertexToPaint.getLabel() + ","
+							+ colorToPaintVertex.toString());
 
-		for (Vertex item : vertices) {
-			// TODO recursive function to search all verties
+			vertexToPaint.setColor((Color) pair.getRight());
+
+			for (Vertex neighbour : vertexToPaint.getNeighbours()) {
+				if (neighbour.getColor() == null) {
+					neighbour.setColor((Color) pair.getRight());
+				}
+			}
+			pair = graph.getUnpaintedNeighbour();
 		}
 
-		return false;
-	}
-
-	private static void paintNeighbour(Vertex vertex, Vertex item) {
-		GraphLogger.getLogger().info(
-				"Vertex[" + vertex.getLabel() + "] that colored with ["
-						+ vertex.getColor().toString() + "]");
-		Color black = Color.BLACK;
-		Color red = Color.RED;
-		if (vertex.getColor().equals(black)) {
-			item.setColor(red);
-			GraphLogger.getLogger().info(
-					"Neighbour[" + item.getLabel() + "] is now painted with ["
-							+ red + "]\n");
-		} else {
-			item.setColor(black);
-			GraphLogger.getLogger().info(
-					"Neighbour[" + item.getLabel() + "] is now painted with ["
-							+ black + "]\n");
+		for (Vertex item : graph.getVertices()) {
+			for (Vertex neighbour : item.getNeighbours()) {
+				System.out.println(item.getLabel() + " " + item.getColor()
+						+ "------" + neighbour.getLabel() + " "
+						+ neighbour.getColor());
+				if (item.getColor().equals(neighbour.getColor())) {
+					return false;
+				}
+			}
 		}
+
+		return true;
 	}
 
 	/**
@@ -111,4 +120,21 @@ public class GraphAlgorithms {
 		}
 	}
 
+	public static boolean isIsomorphic(Graph g1, Graph g2) throws Exception {
+		return (GraphUtils.getOrder(g1) == GraphUtils.getOrder(g2)
+				&& (GraphUtils.getSize(g1) == GraphUtils.getSize(g2)) && checkDiameters(
+					g1, g2));
+	}
+
+	/**
+	 * @param g1
+	 * @param g2
+	 * @throws Exception
+	 */
+	private static boolean checkDiameters(Graph g1, Graph g2) throws Exception {
+		HashMap<Pair, Integer> g1DiameterHashMap = GraphUtils.getDiameters(g1);
+		HashMap<Pair, Integer> g2DiameterHashMap = GraphUtils.getDiameters(g2);
+		System.out.println(g1DiameterHashMap + " " + g2DiameterHashMap);
+		return false;
+	}
 }

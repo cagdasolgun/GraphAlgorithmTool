@@ -12,21 +12,33 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import testdata.TestDataVocabulary;
+import testdata.TestDataVocabulary.Edge2;
 import testdata.TestDataVocabulary.Vertex1;
+import testdata.TestDataVocabulary.Vertex2;
+import testdata.TestDataVocabulary.Vertex3;
 import testdata.TestDataVocabulary.Vertex4;
 import util.GraphUtils;
 
 public class GraphAlgorithmsTest {
 
-	@Ignore
 	@Test
 	public void testGraphBipartite() throws Exception {
 		// get test graph
-		Graph graph = TestDataVocabulary.getSampleGraph();
-		// print adjacenties
-		System.out.println(graph.toString());
+		Vertex v1 = new Vertex(Vertex1.V1, Vertex1.POINT1);
+		Vertex v2 = new Vertex(Vertex2.V2, Vertex2.POINT2);
+		Vertex v3 = new Vertex(Vertex3.V3, Vertex3.POINT3);
+		Vertex v4 = new Vertex(Vertex4.V4, Vertex4.POINT4);
+
+		UndirectedEdge edge1 = new UndirectedEdge(10, v1, v2);
+		UndirectedEdge edge2 = new UndirectedEdge(2, v3, v4);
+		UndirectedEdge edge3 = new UndirectedEdge(5, v1, v3);
+
+		Graph graph = new Graph("G");
+		graph.addEdge(edge1);
+		graph.addEdge(edge2);
+		graph.addEdge(edge3);
+
 		// assert that if graph is bipartite
-		// TODO not implemented!
 		assertTrue(GraphAlgorithms.checkBipartite(graph));
 
 	}
@@ -89,6 +101,7 @@ public class GraphAlgorithmsTest {
 
 	}
 
+	@Ignore
 	@Test
 	public void testEulerianPathInGraph() throws Exception {
 
@@ -112,12 +125,55 @@ public class GraphAlgorithmsTest {
 		graph.addEdge(ac);
 		graph.addEdge(ad);
 		graph.addEdge(ae);
+		graph.addEdge(be);
 		graph.addEdge(cd);
 
 		// check if graph has eulerian path
 		assertTrue(GraphUtils.isEulerianPathExists(graph));
 
+		// TODO bitmedi daha!
+
 	}
 
-	GraphUtils g;
+	@Ignore
+	@Test
+	public void testIsomorphisimOfGivenGraphs() throws Exception {
+
+		// build graph 1
+		Vertex a = new Vertex("a", TestDataVocabulary.randomPointGenerator());
+		Vertex b = new Vertex("b", TestDataVocabulary.randomPointGenerator());
+		Vertex c = new Vertex("c", TestDataVocabulary.randomPointGenerator());
+		Vertex d = new Vertex("d", TestDataVocabulary.randomPointGenerator());
+
+		UndirectedEdge ab = new UndirectedEdge(0, a, b);
+		UndirectedEdge ac = new UndirectedEdge(0, a, c);
+		UndirectedEdge cd = new UndirectedEdge(0, c, d);
+		UndirectedEdge bd = new UndirectedEdge(0, b, d);
+
+		Graph g1 = new Graph("G1");
+		g1.addEdge(ab);
+		g1.addEdge(ac);
+		g1.addEdge(cd);
+		g1.addEdge(bd);
+
+		// build graph 2
+		Vertex u = new Vertex("u", TestDataVocabulary.randomPointGenerator());
+		Vertex v = new Vertex("v", TestDataVocabulary.randomPointGenerator());
+		Vertex y = new Vertex("y", TestDataVocabulary.randomPointGenerator());
+		Vertex z = new Vertex("z", TestDataVocabulary.randomPointGenerator());
+
+		UndirectedEdge uy = new UndirectedEdge(0, u, y);
+		UndirectedEdge vz = new UndirectedEdge(0, v, z);
+		UndirectedEdge uz = new UndirectedEdge(0, u, z);
+		UndirectedEdge vy = new UndirectedEdge(0, v, y);
+
+		Graph g2 = new Graph("G2");
+		g2.addEdge(uy);
+		g2.addEdge(vz);
+		g2.addEdge(uz);
+		g2.addEdge(vy);
+
+		assertTrue(GraphAlgorithms.isIsomorphic(g1, g2));
+
+	}
 }
