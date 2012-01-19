@@ -4,6 +4,7 @@ import graph.pair.Pair;
 import graph.pair.VertexPair;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.util.ArrayList;
 
 import logger.GraphLogger;
@@ -153,15 +154,10 @@ public class Graph {
 	}
 
 	public ArrayList<UndirectedEdge> getConnectedEdges(Vertex vertex) {
-		System.out.println("searching " + vertex.getLabel()
-				+ " connected edges");
 		ArrayList<UndirectedEdge> containingEdges = new ArrayList<UndirectedEdge>();
 		for (UndirectedEdge item : getEdges()) {
 			if (item.has(vertex)) {
 				containingEdges.add(item);
-				System.out.println("[" + item.getPair().getLeft().getLabel()
-						+ "," + item.getPair().getRight().getLabel()
-						+ "] is connected to " + vertex.getLabel());
 			}
 		}
 		return containingEdges;
@@ -170,5 +166,28 @@ public class Graph {
 	public void deleteVertex(Vertex vertex) {
 		getVertices().remove(vertices);
 		getEdges().removeAll(getConnectedEdges(vertex));
+	}
+
+	public ArrayList<Vertex> getUnColoredVertices() {
+		ArrayList<Vertex> uncoloredVertices = new ArrayList<Vertex>();
+		for (Vertex item : getVertices()) {
+			if (item.getColor() == null) {
+				uncoloredVertices.add(item);
+			}
+		}
+		return uncoloredVertices;
+	}
+
+	public Vertex hasVertex(Point point) {
+		for (Vertex item : getVertices()) {
+			boolean a = item.getPoint().getX() - 10 <= point.getX();
+			boolean b = item.getPoint().getX() + 10 >= point.getX();
+			boolean c = item.getPoint().getY() - 10 <= point.getY();
+			boolean d = item.getPoint().getY() + 10 >= point.getY();
+			if (a && b && c && d) {
+				return item;
+			}
+		}
+		return null;
 	}
 }

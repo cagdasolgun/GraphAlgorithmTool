@@ -6,6 +6,7 @@ import graph.Graph;
 import graph.UndirectedEdge;
 import graph.Vertex;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -310,6 +311,198 @@ public class GraphAlgorithmsTest {
 
 		assertEquals(expectedPath, pathOrCircuit);
 
+	}
+
+	@Ignore
+	@Test
+	public void testGraphColoring() throws Exception {
+		// get test graph
+		Vertex A = new Vertex("A", TestDataVocabulary.randomPointGenerator());
+		Vertex B = new Vertex("B", TestDataVocabulary.randomPointGenerator());
+		Vertex C = new Vertex("C", TestDataVocabulary.randomPointGenerator());
+		Vertex D = new Vertex("D", TestDataVocabulary.randomPointGenerator());
+		Vertex E = new Vertex("E", TestDataVocabulary.randomPointGenerator());
+		Vertex F = new Vertex("F", TestDataVocabulary.randomPointGenerator());
+		Vertex G = new Vertex("G", TestDataVocabulary.randomPointGenerator());
+
+		UndirectedEdge e1 = new UndirectedEdge(A, G);
+		UndirectedEdge e2 = new UndirectedEdge(A, F);
+		UndirectedEdge e3 = new UndirectedEdge(A, E);
+		UndirectedEdge e4 = new UndirectedEdge(A, C);
+		UndirectedEdge e5 = new UndirectedEdge(B, F);
+		UndirectedEdge e6 = new UndirectedEdge(B, E);
+		UndirectedEdge e7 = new UndirectedEdge(B, C);
+		UndirectedEdge e8 = new UndirectedEdge(C, D);
+		UndirectedEdge e9 = new UndirectedEdge(D, G);
+		UndirectedEdge e10 = new UndirectedEdge(D, F);
+		UndirectedEdge e11 = new UndirectedEdge(D, E);
+
+		Graph graph = new Graph("G");
+
+		graph.addEdge(e1);
+		graph.addEdge(e2);
+		graph.addEdge(e3);
+		graph.addEdge(e4);
+		graph.addEdge(e5);
+		graph.addEdge(e6);
+		graph.addEdge(e7);
+		graph.addEdge(e8);
+		graph.addEdge(e9);
+		graph.addEdge(e10);
+		graph.addEdge(e11);
+		ArrayList<Color> colors = new ArrayList<Color>();
+		colors.add(Color.BLACK);
+		colors.add(Color.BLUE);
+		colors.add(Color.GREEN);
+		colors.add(Color.ORANGE);
+		colors.add(Color.PINK);
+		colors.add(Color.RED);
+		colors.add(Color.YELLOW);
+
+		ArrayList<Vertex> vertices = graph.getVertices();
+		ArrayList<Vertex> unColoredVertices = graph.getUnColoredVertices();
+		colorGraph(vertices, unColoredVertices, colors, graph);
+
+		Iterator<Vertex> iterator = graph.getVertices().iterator();
+		while (iterator.hasNext()) {
+			Vertex vertex = (Vertex) iterator.next();
+			System.out.println("Name : " + vertex.getLabel() + " Colour : "
+					+ vertex.getColor());
+
+		}
+
+	}
+
+	/**
+	 * @param vertices
+	 * @param unColoredVertices
+	 * @param colors
+	 * @param graph
+	 */
+	private void colorGraph(ArrayList<Vertex> vertices,
+			ArrayList<Vertex> unColoredVertices, ArrayList<Color> colors,
+			Graph graph) {
+		ArrayList<Vertex> unColored = generateDecreasingOrderDegrees(vertices);
+		int currentColor = 0;
+		while (unColoredVertices.size() > 0) {
+			Vertex first = unColored.get(0);
+			unColored.remove(first);
+			first.setColor(colors.get(currentColor));
+			ArrayList<Vertex> coloredWithCurrent = new ArrayList<Vertex>();
+			coloredWithCurrent.add(first);
+			ArrayList<Vertex> toBeRemoved = new ArrayList<Vertex>();
+			for (int i = 0; i < unColored.size(); i++) {
+				Vertex vertex = unColored.get(i);
+				if (hasNoAdjacency(vertex, coloredWithCurrent)) {
+					vertex.setColor(colors.get(currentColor));
+					coloredWithCurrent.add(vertex);
+					toBeRemoved.add(vertex);
+				}
+			}
+			for (int i = 0; i < toBeRemoved.size(); i++) {
+				unColored.remove(toBeRemoved.get(i));
+			}
+			currentColor++;
+			unColoredVertices = graph.getUnColoredVertices();
+		}
+	}
+
+	private boolean hasNoAdjacency(Vertex vertex,
+			ArrayList<Vertex> coloredWithCurrent) {
+		Iterator<Vertex> iterator = coloredWithCurrent.iterator();
+		while (iterator.hasNext()) {
+			Vertex controlVertex = (Vertex) iterator.next();
+			if (controlVertex.getNeighbours().contains(vertex)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public int colorGraph(Graph graph) {
+		ArrayList<Color> colors = new ArrayList<Color>();
+		colors.add(Color.BLACK);
+		colors.add(Color.BLUE);
+		colors.add(Color.GREEN);
+		colors.add(Color.ORANGE);
+		colors.add(Color.PINK);
+		colors.add(Color.RED);
+		colors.add(Color.YELLOW);
+
+		ArrayList<Vertex> vertices = graph.getVertices();
+		ArrayList<Vertex> unColored = generateDecreasingOrderDegrees(vertices);
+		int currentColor = 0;
+		while (graph.getUnColoredVertices().size() > 0) {
+			Vertex first = unColored.get(0);
+			unColored.remove(first);
+			first.setColor(colors.get(currentColor));
+			ArrayList<Vertex> coloredWithCurrent = new ArrayList<Vertex>();
+			coloredWithCurrent.add(first);
+			ArrayList<Vertex> toBeRemoved = new ArrayList<Vertex>();
+			for (int i = 0; i < unColored.size(); i++) {
+				Vertex vertex = unColored.get(i);
+				if (vertex.getNeighbours().contains(coloredWithCurrent)) {
+					vertex.setColor(colors.get(currentColor));
+					coloredWithCurrent.add(vertex);
+					toBeRemoved.add(vertex);
+				}
+			}
+			for (int i = 0; i < toBeRemoved.size(); i++) {
+				unColored.remove(toBeRemoved.get(i));
+			}
+			currentColor++;
+		}
+		return currentColor;
+	}
+
+	private ArrayList<Vertex> generateDecreasingOrderDegrees(
+			ArrayList<Vertex> vertexes) {
+
+		for (int i = 0; i < vertexes.size() - 1; i++) {
+
+			for (int j = 1; j < vertexes.size() - i; j++) {
+				if (vertexes.get(j).getNeighbours().size() > vertexes
+						.get(j - 1).getNeighbours().size()) {
+					Vertex temp = vertexes.get(j - 1);
+					vertexes.set(j - 1, vertexes.get(j));
+					vertexes.set(j, temp);
+
+				}
+			}
+
+		}
+		return vertexes;
+	}
+
+	/**
+	 * @param colors
+	 * @param current
+	 * @param graph
+	 *            TODO
+	 * @param conflictEdges
+	 *            TODO
+	 * @param coloredVertices
+	 *            TODO
+	 */
+	@SuppressWarnings("unused")
+	private void colorNeighbour(ArrayList<Color> colors, Vertex current,
+			Graph graph, ArrayList<UndirectedEdge> conflictEdges,
+			ArrayList<Vertex> coloredVertices) {
+		System.out.println("current vertex is " + current.getLabel()
+				+ ". colored with " + current.getColor());
+		ArrayList<Vertex> uncoloredNeighbours = GraphUtils
+				.getUncoloredNeighbours(current);
+		if (uncoloredNeighbours.size() > 0) {
+			ArrayList<Color> temp = colors;
+			temp.remove(current.getColor());
+			for (Color color : temp) {
+				System.out.print(color + " - ");
+			}
+			Vertex next = uncoloredNeighbours.get(0);
+			next.setColor(temp.get(0));
+			colorNeighbour(colors, next, graph, conflictEdges, coloredVertices);
+		}
 	}
 
 }

@@ -341,4 +341,14 @@ public class GraphUtils {
 					maxNumber);
 		}
 	}
+
+	public static ArrayList<Vertex> getUncoloredNeighbours(Vertex next) {
+		ArrayList<Vertex> uncoloredNeighbours = new ArrayList<Vertex>();
+		for (Vertex item : next.getNeighbours()) {
+			if (item.getColor() == null) {
+				uncoloredNeighbours.add(item);
+			}
+		}
+		return uncoloredNeighbours;
+	}
 }

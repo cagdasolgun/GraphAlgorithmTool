@@ -15,6 +15,7 @@ public class Vertex {
 	private Color color;
 	private int value;
 	private boolean visited = false;
+	private boolean selected = false;
 	private Logger logger = GraphLogger.getLogger();
 
 	public Vertex(String label, Point point) {
@@ -28,6 +29,10 @@ public class Vertex {
 
 	public Point getPoint() {
 		return this.point;
+	}
+
+	public void setPoint(Point point) {
+		this.point = point;
 	}
 
 	public ArrayList<Vertex> getNeighbours() {
@@ -110,6 +115,14 @@ public class Vertex {
 		} else if (!label.equals(other.label))
 			return false;
 		return true;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 
 }
